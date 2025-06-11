@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Admin Dashboard</h1>
+    <form method="post" action="/customers">
+        <input type="text" name="name" placeholder="Customer Name" required>
+        <input type="email" name="email" placeholder="Customer Email" required>
+        <input type="text" name="status" placeholder="Status" required>
+        <input type="submit" value="Add Customer">
+    </form>
+    <h2>Customers</h2>
+    <ul class="customer-list">
+        {% for customer in customers %}
+            <li>{{ customer.name }} - {{ customer.email }} - {{ customer.status }} - {{ customer.created_at }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

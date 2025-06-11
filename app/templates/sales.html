@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Sales Dashboard</h1>
+<table>
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Status</th></tr>
+    {% for customer in customers %}
+    <tr>
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.email }}</td>
+        <td>{{ customer.status }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
