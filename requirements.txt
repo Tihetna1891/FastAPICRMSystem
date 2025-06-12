@@ -42,7 +42,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
 python-jose==3.5.0
 python-multipart==0.0.20
-pywin32==310
+pywin32==301
 pyzmq==26.4.0
 rsa==4.9.1
 six==1.17.0
