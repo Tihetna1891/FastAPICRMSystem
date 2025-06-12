@@ -15,7 +15,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     password = Column(String)
-    role = Column(Enum(UserRole))
+    role = Column(Enum(UserRole), default=UserRole.ADMIN)
 
 class Customer(Base):
     __tablename__ = "customers"
