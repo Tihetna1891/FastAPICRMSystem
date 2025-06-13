@@ -9,28 +9,33 @@ logger = logging.getLogger(__name__)
 
 database_url = os.getenv("DATABASE_URL")
 if not database_url:
-    logger.error("DATABASE_URL is not set in the environment")
-    raise ValueError("DATABASE_URL environment variable is not set")
+    logger.error("DATABASE_URL is not set")
+    raise ValueError("DATABASE_URL not found")
 
-logger.info(f"Connecting to database with URL: {database_url}")
+logger.info(f"Connecting to database: {database_url}")
 engine = create_engine(database_url)
 logger.info("Creating database schema")
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    logger.info("Schema created successfully")
+except Exception as e:
+    logger.error(f"Failed to create schema: {e}")
+    raise
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 db = SessionLocal()
 
-initial_users = [
+users = [
     {"username": "admin", "password": "adminpass", "role": "ADMIN"},
     {"username": "sales", "password": "salespass", "role": "SALES"},
     {"username": "support", "password": "supportpass", "role": "SUPPORT"},
 ]
-
-for user_data in initial_users:
-    if not db.query(User).filter(User.username == user_data["username"]).first():
-        db.add(User(username=user_data["username"], password=get_password_hash(user_data["password"]), role=user_data["role"]))
-        logger.info(f"Created user: {user_data['username']}")
+for user in users:
+    existing_user = db.query(User).filter(User.username == user["username"]).first()
+    if not existing_user:
+        db.add(User(**user, password=get_password_hash(user["password"])))
+        logger.info(f"Added user: {user['username']}")
 db.commit()
-logger.info("Database initialization completed")
+logger.info("User initialization complete")
 
 db.close()
